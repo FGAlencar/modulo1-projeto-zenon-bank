@@ -6,95 +6,61 @@ import br.com.zenon.representation.transaction.TransactionType;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PaySimTransactionIngestor {
     private final File fileToIngest;
-    private static final int DEFAULT_NUMBER_OF_LINES = 1000;
-    private boolean readEntireFile = false;
+    private static final int DEFAULT_NUMBER_OF_LINES = Integer.MAX_VALUE;
     private int numberOfLines = DEFAULT_NUMBER_OF_LINES;
 
     public PaySimTransactionIngestor(File fileToIngest) {
         this.fileToIngest = fileToIngest;
     }
 
+    public PaySimTransactionIngestor numberOfLines(int numberOfLines) {
+        this.numberOfLines = numberOfLines;
+        return this;
+    }
+
     public PaySimTransactionIngestor entireFile() {
-        this.readEntireFile = true;
         this.numberOfLines = DEFAULT_NUMBER_OF_LINES;
         return this;
     }
 
-    public PaySimTransactionIngestor numberOfLines(int numberOfLines) {
-        this.numberOfLines = numberOfLines;
-        this.readEntireFile = false;
-        return this;
+    public List<Transaction> start() throws IOException {
+       return this.readFile();
     }
 
-    public List<Transaction> read() throws IOException {
-        return this.readEntireFile
-                ? this.readEntireFile(this.fileToIngest)
-                : this.readFirstXLines(this.fileToIngest, this.numberOfLines);
-    }
-
-    private List<Transaction> readEntireFile(File file) throws IOException {
+    private List<Transaction> readFile() throws IOException{
         List<Transaction> transactions = new ArrayList<>();
-        try(BufferedReader reader = this.readFile(file)){
-            String header = reader.readLine();
+        try(BufferedReader reader = new BufferedReader(new FileReader(this.fileToIngest))){
+            String header = reader.readLine(); //primeira linha sempre é o header
             PaySimTransactionValidator validator = new PaySimTransactionValidator(header);
-
-            String register;
-
-            while ((register = reader.readLine()) != null){
-                try{
-                    String[] splittedRegister = register.split(",", -1);
-                    validator.assertValidLine(splittedRegister);
-                    transactions.add(PaySimTransactionMapper.fromCsvLine(splittedRegister));
-                } catch (Exception e) {
-                    System.err.printf("Error: %s | %s  -> %s%n", register, e.getClass().getName(),e.getMessage());
-                }
-            }
-
-            return  transactions;
-        }
-    }
-
-    private List<Transaction> readFirstXLines( File file, int numberOfLinesToRead) throws IOException {
-        List<Transaction> transactions = new ArrayList<>();
-        try(BufferedReader reader = this.readFile(file)){
-            String header = reader.readLine();
-            PaySimTransactionValidator validator = new PaySimTransactionValidator(header);
-
             String register;
             int count = 0;
-            while ((register = reader.readLine()) != null){
-                if(count == numberOfLinesToRead){
-                    break;
-                }
-
-                try{
-                    String[] splittedRegister = register.split(",", -1);
-                    validator.assertValidLine(splittedRegister);
-                    transactions.add(PaySimTransactionMapper.fromCsvLine(splittedRegister));
-                } catch (Exception e) {
-                    System.err.printf("Error: %s | %s  -> %s%n", register, e.getClass().getName(),e.getMessage());
-                }
-
+            while ( (register = reader.readLine()) != null && count < this.numberOfLines){
+                this.mapTransaction(validator, register).ifPresent(transactions::add);
                 count++;
-
             }
-
             return transactions;
         }
     }
 
-    private BufferedReader readFile(File file) throws FileNotFoundException {
-        return new BufferedReader(new FileReader(file));
+    private Optional<Transaction> mapTransaction(PaySimTransactionValidator validator, String register){
+        try{
+            String[] splittedRegister = register.split(",", -1);
+            validator.assertValidLine(splittedRegister);
+            return Optional.of(PaySimTransactionMapper.fromCsvLine(splittedRegister));
+        } catch (Exception e) {
+            System.err.printf("Error: %s | %s  -> %s%n", register, e.getClass().getName(),e.getMessage());
+            return Optional.empty();
+        }
     }
 
     static class PaySimTransactionMapper {
