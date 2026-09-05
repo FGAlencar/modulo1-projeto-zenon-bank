@@ -14,21 +14,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class PaySimTransactionIngestor {
+public class TransactionIngestor {
     private final File fileToIngest;
     private static final int DEFAULT_NUMBER_OF_LINES = Integer.MAX_VALUE;
     private int numberOfLines = DEFAULT_NUMBER_OF_LINES;
 
-    public PaySimTransactionIngestor(File fileToIngest) {
+    public TransactionIngestor(File fileToIngest) {
         this.fileToIngest = fileToIngest;
     }
 
-    public PaySimTransactionIngestor numberOfLines(int numberOfLines) {
+    public TransactionIngestor numberOfLines(int numberOfLines) {
         this.numberOfLines = numberOfLines;
         return this;
     }
 
-    public PaySimTransactionIngestor entireFile() {
+    public TransactionIngestor entireFile() {
         this.numberOfLines = DEFAULT_NUMBER_OF_LINES;
         return this;
     }
