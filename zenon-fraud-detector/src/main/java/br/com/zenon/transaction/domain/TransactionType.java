@@ -1,4 +1,4 @@
-package br.com.zenon.representation.transaction;
+package br.com.zenon.transaction.domain;
 
 public enum TransactionType {
     CASH_IN, CASH_OUT, DEBIT, PAYMENT, TRANSFER;

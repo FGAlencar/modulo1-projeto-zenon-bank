@@ -1,6 +1,6 @@
-package br.com.zenon.repository.transaction;
+package br.com.zenon.transaction.repository;
 
-import br.com.zenon.representation.transaction.Transaction;
+import br.com.zenon.transaction.domain.Transaction;
 
 import java.util.Optional;
 
