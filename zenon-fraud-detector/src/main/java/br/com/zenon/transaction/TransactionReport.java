@@ -16,7 +16,7 @@ public class TransactionReport {
         this.path = path;
     }
 
-    public Report read() throws IOException {
+    public Report generate() throws IOException {
         try(Stream<String> inputStream =  Files.lines(path)){
             return inputStream.skip(1)
                 .map(line -> line.split(",", -1))
