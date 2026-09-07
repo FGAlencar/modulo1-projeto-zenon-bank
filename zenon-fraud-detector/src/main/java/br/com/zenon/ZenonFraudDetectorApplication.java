@@ -11,11 +11,11 @@ public class ZenonFraudDetectorApplication {
         String FILE_BAD_PATH = "data/paysim_with_bad_data.csv";
 
         Path path = Path.of(FILE_PATH);
-        TransactionReport report = new TransactionReport(path);
-        TransactionReport.Report statiscs =  report.read();
+        TransactionReport transactionReport = new TransactionReport(path);
+        TransactionReport.Report report =  transactionReport.read();
 
-        IO.println("Total de linhas: " + statiscs.total());
-        IO.println("Total de fraudes: " + statiscs.totalFraud());
-        IO.println("Valor total transacionado: " + statiscs.totalAmount());
+        IO.println("Total de linhas: " + report.total());
+        IO.println("Total de fraudes: " + report.totalFraud());
+        IO.println("Valor total transacionado: " + report.totalAmount());
     }
 }
