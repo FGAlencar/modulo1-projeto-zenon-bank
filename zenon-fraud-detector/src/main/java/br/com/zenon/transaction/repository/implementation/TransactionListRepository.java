@@ -1,7 +1,7 @@
-package br.com.zenon.repository.transaction.implementation;
+package br.com.zenon.transaction.repository.implementation;
 
-import br.com.zenon.repository.transaction.TransactionRepository;
-import br.com.zenon.representation.transaction.Transaction;
+import br.com.zenon.transaction.repository.TransactionRepository;
+import br.com.zenon.transaction.domain.Transaction;
 
 import java.util.List;
 import java.util.Objects;

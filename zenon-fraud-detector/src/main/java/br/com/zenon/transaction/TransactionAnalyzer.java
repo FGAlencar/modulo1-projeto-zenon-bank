@@ -1,6 +1,6 @@
-package br.com.zenon.representation.analyzer;
+package br.com.zenon.transaction;
 
-import br.com.zenon.representation.transaction.Transaction;
+import br.com.zenon.transaction.domain.Transaction;
 
 import java.util.Comparator;
 import java.util.List;

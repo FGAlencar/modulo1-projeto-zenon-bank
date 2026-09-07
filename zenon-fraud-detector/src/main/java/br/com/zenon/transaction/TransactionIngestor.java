@@ -1,8 +1,8 @@
-package br.com.zenon;
+package br.com.zenon.transaction;
 
-import br.com.zenon.representation.transaction.Transaction;
-import br.com.zenon.representation.transaction.TransactionAccount;
-import br.com.zenon.representation.transaction.TransactionType;
+import br.com.zenon.transaction.domain.Transaction;
+import br.com.zenon.transaction.domain.TransactionAccount;
+import br.com.zenon.transaction.domain.TransactionType;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,8 @@
 package br.com.zenon;
 
-import br.com.zenon.representation.analyzer.TransactionAnalyzer;
-import br.com.zenon.representation.transaction.Transaction;
+import br.com.zenon.transaction.TransactionAnalyzer;
+import br.com.zenon.transaction.TransactionIngestor;
+import br.com.zenon.transaction.domain.Transaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
